@@ -5,6 +5,7 @@ use esp_idf_sys as _; // If using the `binstart` feature of `esp-idf-sys`, alway
 use log::info;
 use rgb_led::{RGB8, WS2812RMT};
 use wifi::wifi;
+use esp_idf_sys::nvs_flash_init;
 
 /// This configuration is picked up at compile time by `build.rs` from the
 /// file `cfg.toml`.
@@ -17,6 +18,10 @@ pub struct Config {
 }
 
 fn main() -> Result<()> {
+    unsafe {
+        nvs_flash_init();
+    }
+
     // It is necessary to call this function once. Otherwise some patches to the runtime
     // implemented by esp-idf-sys might not link properly. See https://github.com/esp-rs/esp-idf-template/issues/71
     esp_idf_sys::link_patches();
@@ -50,12 +55,12 @@ fn main() -> Result<()> {
     loop {
         // Blue!
         led.set_pixel(RGB8::new(0, 0, 50))?;
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        std::thread::sleep(std::time::Duration::from_millis(500));
 
         info!("blink!");
 
         // Green!
         led.set_pixel(RGB8::new(0, 50, 0))?;
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        std::thread::sleep(std::time::Duration::from_millis(500));
     }
 }
