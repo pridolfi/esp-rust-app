@@ -1,0 +1,3 @@
+[esp-rust-app]
+wifi_ssid = "ESP32Net"
+wifi_psk = "35P32N3t"
