@@ -2,10 +2,11 @@ use anyhow::{bail, Result};
 use esp_idf_hal::prelude::Peripherals;
 use esp_idf_svc::eventloop::EspSystemEventLoop;
 use esp_idf_sys as _; // If using the `binstart` feature of `esp-idf-sys`, always keep this module imported
+use esp_idf_sys::{nvs_flash_init};
 use log::info;
 use rgb_led::{RGB8, WS2812RMT};
 use wifi::wifi;
-use esp_idf_sys::nvs_flash_init;
+use std::net::UdpSocket;
 
 /// This configuration is picked up at compile time by `build.rs` from the
 /// file `cfg.toml`.
@@ -52,6 +53,8 @@ fn main() -> Result<()> {
         }
     };
 
+    socket_test();
+
     loop {
         // Blue!
         led.set_pixel(RGB8::new(0, 0, 50))?;
@@ -63,4 +66,9 @@ fn main() -> Result<()> {
         led.set_pixel(RGB8::new(0, 50, 0))?;
         std::thread::sleep(std::time::Duration::from_millis(500));
     }
+}
+
+fn socket_test() {
+    let socket = UdpSocket::bind("0.0.0.0:8001").expect("couldn't create socket");
+    socket.send_to(b"pepe", "192.168.223.23:8000").expect("couldn't send_to");
 }
