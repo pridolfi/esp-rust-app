@@ -16,6 +16,8 @@ pub struct Config {
     wifi_ssid: &'static str,
     #[default("")]
     wifi_psk: &'static str,
+    #[default("")]
+    server_addr: &'static str,
 }
 
 fn main() -> Result<()> {
@@ -67,7 +69,7 @@ fn main() -> Result<()> {
         std::thread::sleep(std::time::Duration::from_millis(500));
 
         socket
-            .send_to(b"blink!", "192.168.223.23:8000")
+            .send_to(b"blink!", app_config.server_addr)
             .expect("couldn't send_to");
     }
 }

@@ -1,3 +1,4 @@
 [esp-rust-app]
 wifi_ssid = "ESP32Net"
 wifi_psk = "35P32N3t"
+server_addr = "192.168.1.19:8000"
